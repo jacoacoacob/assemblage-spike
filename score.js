@@ -33,21 +33,27 @@ function scoreTile(board, tileIndex) {
             return accum;
         }, {});
 
-        console.log(playerTotals);
-
         const remainingTileThreshold = tile.threshold - tileContents.tokenValueTotal;
 
-        playerNames.forEach(player => {
-            const otherPlayers = playerNames.filter(player_ => player_ !== player);
-            otherPlayers.forEach(otherPlayer => {
-                const diff = playerTotals[player] - playerTotals[otherPlayer];
-                console.log("score", player, diff + remainingTileThreshold);
-            });
-        });
+        const playerScores = playerNames.reduce((accum, player) => {
+            accum[player] = 0;
+            playerNames
+                .filter(player_ => player_ !== player)
+                .forEach(otherPlayer => {
+                    const diff = playerTotals[player] - playerTotals[otherPlayer];
+                    // if (tile.operator === "add") {
+                        accum[player] += diff + remainingTileThreshold;
+                    // } else {
+                        // accum[player] += diff  remainingTileThreshold;
+                    // }
+                });
+            return accum;
+        }, {});
 
+        return playerScores;
     }
 
-    return tileContents;
+    return null;
 }
 
 export { scoreTile };

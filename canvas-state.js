@@ -1,8 +1,39 @@
-import { Board, validateMove } from "./board.js";
+import { Board } from "./board.js";
 import { Canvas } from "./canvas.js";
 import { FSM } from "./state.js";
-import { isCircleCollision } from "./utils.js";
+import { isCircleCollision, sum } from "./utils.js";
 import { saveBoard } from "./storage.js";
+
+/**
+ * 
+ * @param {Board} board
+ * @param {number} tileIndex 
+ * @param {string} tokenId 
+ */
+function validateMove(board, tileIndex, tokenId) {
+    const tileTokenIds = board.graph[tileIndex].filter(
+        tokenId_ => tokenId_ !== tokenId
+    );
+    if (tileTokenIds.length > 3) {
+        return {
+            isValid: false,
+            message: "Each tile can contain a maximum of 4 tokens.",
+        };
+    }
+    const tile = board.tiles[tileIndex];
+    const token = board.tokens[tokenId];
+    const tileTokenValueSum = sum(
+        tileTokenIds.map(tokenId => Math.abs(board.tokens[tokenId].value))
+    );
+    if (tileTokenValueSum + Math.abs(token.value) > tile.threshold) {
+        return {
+            isValid: false,
+            message: `The sum of all token values in a tile must be less than or equal to the tile's threshold (${tile.threshold}).`
+        }
+    }
+    return { isValid: true };
+}
+
 
 /**
  * 

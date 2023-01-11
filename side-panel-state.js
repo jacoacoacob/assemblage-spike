@@ -18,7 +18,10 @@ function createSidePanelState(board, canvas, paint) {
 
             btnScore.addEventListener("click", (e) => {
                 board.tiles.forEach((_, tileIndex) => {
-                    scoreTile(board, tileIndex)
+                    const score = scoreTile(board, tileIndex);
+                    if (score) {
+                        console.log(score);
+                    }
                 })
             });
         },

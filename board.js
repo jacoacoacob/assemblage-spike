@@ -1,5 +1,3 @@
-import { Canvas } from "./canvas.js";
-import { drawArc, drawText } from "./draw.js";
 import { randFromRange, randId, sum } from "./utils.js";
 
 class Tile {
@@ -21,7 +19,7 @@ class Tile {
 class Token {
     /**
      * 
-     * @param {string} player
+     * @param {string} player A unique identifier for a player
      * @param {number} value 
      * @param {number} tileIndex 
      * @param {number} r 
@@ -32,45 +30,13 @@ class Token {
         this.y = 0;
         this.isFocused = false;
 
-        this.player = player;
         this.value = value;
-        this.tileIndex = tileIndex;
+        this.player = player;
+        this.tileIndex = typeof tileIndex === "number" ? tileIndex : -1;
         this.r = r;
     }
 }
 
-
-
-
-/**
- * 
- * @param {Board} board
- * @param {number} tileIndex 
- * @param {string} tokenId 
- */
-function validateMove(board, tileIndex, tokenId) {
-    const tileTokenIds = board.graph[tileIndex].filter(
-        tokenId_ => tokenId_ !== tokenId
-    );
-    if (tileTokenIds.length > 3) {
-        return {
-            isValid: false,
-            message: "Each tile can contain a maximum of 4 tokens.",
-        };
-    }
-    const tile = board.tiles[tileIndex];
-    const token = board.tokens[tokenId];
-    const tileTokenValueSum = sum(
-        tileTokenIds.map(tokenId => board.tokens[tokenId].value)
-    );
-    if (tileTokenValueSum + token.value > tile.threshold) {
-        return {
-            isValid: false,
-            message: `The sum of all token values in a tile must be less than or equal to the tile's threshold (${tile.threshold}).`
-        }
-    }
-    return { isValid: true };
-}
 
 class Board {
     /**
@@ -107,7 +73,7 @@ class Board {
     addToken(player, value, tileIndex) {
         const token = new Token(player, value, tileIndex, this.tileSize / 6);
         if (Boolean(this.tokens[token.id])) {
-            this.addToken(value, tileIndex);
+            this.addToken(player, value, tileIndex);
         } else {
             this.tokens[token.id] = token;
             this.moveToken(token.id, tileIndex);
@@ -151,11 +117,18 @@ class Board {
     moveToken(tokenId, tileIndex) {
         const token = this.tokens[tokenId];
         if (token) {
-            this.graph[token.tileIndex] = this.graph[token.tileIndex].filter(
-                tokenId => tokenId !== token.id
-            );
-            this.graph[tileIndex].push(token.id);
+            if (token.tileIndex > -1) {
+                this.graph[token.tileIndex] = this.graph[token.tileIndex].filter(
+                    tokenId => tokenId !== token.id
+                );
+            }
             token.tileIndex = tileIndex;
+            if (tileIndex > -1) {
+                this.graph[tileIndex].push(token.id);
+            } else {
+                // add to player's token reserve
+            }
+            this.positionTokenInTile(token.id);
         }
     }
 
@@ -165,13 +138,23 @@ class Board {
      */
     positionTokenInTile(tokenId) {
         const token = this.tokens[tokenId];
-        if (token) {
+        if (token && token.tileIndex > -1) {
             const tileTokenIndex = this.graph[token.tileIndex].indexOf(tokenId);
             const { x: tileX, y: tileY } = this.getTileCoords(token.tileIndex);
             token.x = tileX + this.tileSize / 4 * (tileTokenIndex % 2 === 0 ? 1 : 3);
             token.y = tileY + this.tileSize / 4 * (tileTokenIndex < 2 ? 1 : 3);
         }
     }
+
+    // /**
+    //  * 
+    //  * @param {string} tokenId 
+    //  * @param {number} tileIndex 
+    //  */
+    // placeToken(tokenId, tileIndex) {
+    //     this.moveToken(tokenId, tileIndex);
+    //     this.positionTokenInTile()
+    // }
 
     /**
      * 
@@ -185,4 +168,4 @@ class Board {
     }
 }
 
-export { Board, Token, validateMove };
+export { Board, Token };
