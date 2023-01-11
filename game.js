@@ -1,8 +1,8 @@
 
-import { createDb } from "./database.js";
+// import { createDb } from "./database.js";
 import { Canvas } from "./canvas.js";
-import { drawArc, drawRect, drawText } from "./draw.js";
-import { isCircleCollision, randFromRange } from "./utils.js";
+import { drawRect, drawText } from "./draw.js";
+import { isCircleCollision, randFromRange, sum } from "./utils.js";
 // import { Board, ADD, SUBTRACT } from "./sandbox.js";
 import { Board, paintToken } from "./board.js";
 import { FSM } from "./state.js";
@@ -23,12 +23,12 @@ function loadBoard() {
         board.graph = saved.graph;
     } catch {
         console.log("couldn't load board");
-        board.addToken(3, 30);
-        board.addToken(2, 30);
-        board.addToken(5, 30);
-        board.addToken(5, 30);
-        board.addToken(1, 21);
-        board.addToken(6, 74);
+        board.addToken("p1", 3, 30);
+        board.addToken("p1", 2, 30);
+        board.addToken("p1", 5, 30);
+        board.addToken("p2", 5, 30);
+        board.addToken("p2", 1, 21);
+        board.addToken("p2", 6, 74);
     }
     return board;
 }
@@ -38,22 +38,56 @@ function createGame() {
     const canvas = new Canvas("canvas");
     const board = window.board = loadBoard();
 
-    const state = new FSM({ selectedTokenId: null });
+    const canvasState = new FSM({ selectedTokenId: null });
+    const moveState = new FSM({ selector: "#messages", message: "" });
 
-    state.addState("mousedown", {
+    moveState.addState("valid");
+    moveState.addState("invalid", {
+        setup() {
+            document.querySelector(this.data.selector).textContent = this.data.message;
+        },
+        cleanup() {
+            this.data.message = "";
+            document.querySelector(this.data.selector).textContent = "";
+        }
+    })
+
+    canvasState.addState("mousedown", {
         setup() {
             board.tokens[this.data.selectedTokenId].isFocused = true;
             canvas.on("mousemove", (e) => {
+                const {  } = board.getTileFromCoords(e.offsetX, e.offsetY);
                 board.updateTokenCoords(this.data.selectedTokenId, e.offsetX, e.offsetY);
+                const tileIsFull = false;
+                const tileIsOverThreshold = false;
+                if (tileIsFull || tileIsOverThreshold) {
+                    if (moveState.state === "valid") {
+                        moveState.setState(
+                            "invalid",
+                            {
+                                message: tileIsFull
+                                    ? "Each tile can contain a maximum of 4 tokens."
+                                    : "The sum of all token values in a tile must be less than or equal to the tile's threshold."
+                            }
+                        );
+                    }
+                }
                 paint();
             });
             canvas.on("mouseup", (e) => {
-                const { tileIndex } = board.getTileFromCoords(e.offsetX, e.offsetY);
+                moveState.setState("valid");
+                const { tileIndex, tile } = board.getTileFromCoords(e.offsetX, e.offsetY);
+                const selectedToken = board.tokens[this.data.selectedTokenId];
+                const originalTileIndex = board.tokens[selectedToken.id].tileIndex;
                 const nTileTokens = board.graph[tileIndex].length;
-                if (nTileTokens < 4) {
-                    board.moveToken(this.data.selectedTokenId, tileIndex);
+                const tileTokenSum = sum(board.graph[tileIndex].map(tokenId => board.tokens[tokenId].value))
+                if (nTileTokens < 4 && tileTokenSum + selectedToken.value <= tile.threshold) {
+                    board.moveToken(selectedToken.id, tileIndex);
                 }
-                board.positionTokenInTile(this.data.selectedTokenId);
+                board.graph[originalTileIndex].forEach(tokenId => {
+                    board.positionTokenInTile(tokenId);
+                });
+                board.positionTokenInTile(selectedToken.id);
                 saveBoard(board)
                 paint();
                 this.setState("idle");
@@ -67,7 +101,7 @@ function createGame() {
         }
     })
 
-    state.addState("idle", {
+    canvasState.addState("idle", {
         setup() {
             canvas.on("mousedown", (e) => {
                 const { tileIndex } = board.getTileFromCoords(e.offsetX, e.offsetY);
@@ -87,7 +121,8 @@ function createGame() {
         canvas.width = board.cols * board.tileSize;
         canvas.height = board.rows * board.tileSize;
 
-        state.setState("idle");
+        canvasState.setState("idle");
+        moveState.setState("valid");
 
         saveBoard(board)
     }
@@ -102,13 +137,20 @@ function createGame() {
                 w: board.tileSize,
                 h: board.tileSize,
                 fill: true,
-                fillStyle: tile.color,
+                // fillStyle: tile.color,
+                fillStyle: "whitesmoke",
                 stroke: true,
             });
+            drawText(canvas, {
+                x: tileX + board.tileSize / 2 - 4,
+                y: tileY + board.tileSize / 2 + 4,
+                font: "14px sans-serif",
+                text: tile.threshold,
+            })
         });
         const deferred = [];
-        board.graph.forEach((tokenIds, tileIndex) => {
-            tokenIds.forEach((tokenId, tileTokenIndex) => {
+        board.graph.forEach((tokenIds) => {
+            tokenIds.forEach((tokenId) => {
                 const token = board.tokens[tokenId];
                 if (token) {
                     if (token.isFocused) {

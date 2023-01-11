@@ -19,21 +19,29 @@ class Tile {
 class Token {
     /**
      * 
+     * @param {string} player
      * @param {number} value 
      * @param {number} tileIndex 
      * @param {number} r 
      */
-    constructor(value, tileIndex, r) {
+    constructor(player, value, tileIndex, r) {
         this.id = randId(6);
         this.x = 0;
         this.y = 0;
         this.isFocused = false;
         
-        this.r = r;
+        this.player = player;
         this.value = value;
         this.tileIndex = tileIndex;
+        this.r = r;
     }
 }
+
+
+const TOKEN_COLORS = {
+    p1: "#fad",
+    p2: "#adf",
+};
 
 /**
  * 
@@ -46,11 +54,15 @@ function paintToken(canvas, token) {
         y: token.y,
         r: token.r,
         fill: true,
+        fillStyle: TOKEN_COLORS[token.player],
+        stroke: true,
+        strokeStyle: "#555"
     });
     drawText(canvas, {
         x: token.x - 3,
         y: token.y + 4,
-        fillStyle: "white",
+        font: "12px sans-serif",
+        fillStyle: "black",
         text: token.value
     });
 }
@@ -84,8 +96,8 @@ class Board {
         this.graph = this.tiles.map(() => []);
     }
 
-    addToken(value, tileIndex) {
-        const token = new Token(value, tileIndex, this.tileSize / 6);
+    addToken(player, value, tileIndex) {
+        const token = new Token(player, value, tileIndex, this.tileSize / 6);
         if (Boolean(this.tokens[token.id])) {
             this.addToken(value, tileIndex);
         } else {

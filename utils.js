@@ -24,4 +24,13 @@ function isCircleCollision(c1, c2) {
     return distance < c1.r + c2.r;
 }
 
-export { randFromRange, randId, isCircleCollision };
+/**
+ * 
+ * @param  {number[]} numbers 
+ * @returns 
+ */
+function sum(numbers) {
+    return numbers.reduce((accum, n) => accum + n, 0);
+}
+
+export { randFromRange, randId, isCircleCollision, sum };
