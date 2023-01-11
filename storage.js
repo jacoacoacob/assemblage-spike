@@ -14,7 +14,7 @@ function saveBoard(board) {
  * @param {(board: Board) => void} fallbackCallback 
  */
 function loadBoard(gameId, fallbackCallback) {
-    const board = new Board(gameId, 8, 12, 80);
+    const board = new Board(gameId, 6, 10, 72);
     try {
         const saved = JSON.parse(localStorage.getItem(`assemblage-${gameId}`));
         board.rows = saved.rows;

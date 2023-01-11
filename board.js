@@ -6,10 +6,12 @@ class Tile {
     /**
      * 
      * @param {number} threshold 
+     * @param {"add" | "subtract"} operator 
      * @param {[number, number, number] | [number, number, number, number]} color 
      */
-    constructor(threshold, [r,g,b,a]) {
+    constructor(threshold, operator, [r, g, b, a]) {
         this.threshold = threshold;
+        this.operator = operator;
         this.color = typeof a === "number"
             ? `rgba(${r}, ${g}, ${b}, ${a})`
             : `rgb(${r}, ${g}, ${b})`;
@@ -29,7 +31,7 @@ class Token {
         this.x = 0;
         this.y = 0;
         this.isFocused = false;
-        
+
         this.player = player;
         this.value = value;
         this.tileIndex = tileIndex;
@@ -64,7 +66,7 @@ function validateMove(board, tileIndex, tokenId) {
     if (tileTokenValueSum + token.value > tile.threshold) {
         return {
             isValid: false,
-            message: "The sum of all token values in a tile must be less than or equal to the tile's threshold."
+            message: `The sum of all token values in a tile must be less than or equal to the tile's threshold (${tile.threshold}).`
         }
     }
     return { isValid: true };
@@ -87,6 +89,7 @@ class Board {
         this.tiles = Array.from(Array(rows * cols)).map(
             () => new Tile(
                 randFromRange(5, 15),
+                Math.random() < 0.5 ? "add" : "subtract",
                 [
                     randFromRange(0, 255),
                     randFromRange(0, 255),

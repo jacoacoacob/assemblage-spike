@@ -17,8 +17,8 @@ function paintBoard(canvas, board) {
             w: board.tileSize,
             h: board.tileSize,
             fill: true,
-            fillStyle: tile.color,
-            // fillStyle: "whitesmoke",
+            // fillStyle: tile.color,
+            fillStyle: "whitesmoke",
             stroke: true,
         });
         drawText(canvas, {
@@ -47,8 +47,9 @@ function paintBoard(canvas, board) {
 }
 
 const TOKEN_COLORS = {
-    p1: "#fad",
-    p2: "#adf",
+    p1: "#adf",
+    p2: "#fad",
+    p3: "#dfa"
 };
 
 /**

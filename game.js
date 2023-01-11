@@ -9,12 +9,15 @@ import { paintBoard } from "./paint.js";
 function createGame(name) {
     const canvas = new Canvas("canvas");
     const board = window.board = loadBoard(name, b => {
-        b.addToken("p1", 3, 30);
-        b.addToken("p1", 2, 30);
-        b.addToken("p1", 2, 30);
-        b.addToken("p2", 3, 30);
+        b.addToken("p1", 3, 25);
+        b.addToken("p1", 2, 25);
+        b.addToken("p1", 2, 25);
+        b.addToken("p2", 3, 25);
         b.addToken("p2", 1, 21);
-        b.addToken("p2", 4, 74);
+        b.addToken("p2", 4, 54);
+        b.addToken("p3", 2, 54);
+        b.addToken("p3", 1, 54);
+        b.addToken("p3", 4, 54);
     });
 
     const { canvasState, moveValidityState } = createCanvasState(board, canvas, paint);
