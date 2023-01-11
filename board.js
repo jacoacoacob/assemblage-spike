@@ -146,10 +146,10 @@ class Board {
     positionTokenInTile(tokenId) {
         const token = this.tokens[tokenId];
         if (token) {
-            const nTokensInTile = this.graph[token.tileIndex].length;
+            const tileTokenIndex = this.graph[token.tileIndex].indexOf(tokenId);
             const { x: tileX, y: tileY } = this.getTileCoords(token.tileIndex);
-            token.x = tileX + this.tileSize / 4 * (nTokensInTile % 2 === 0 ? 1 : 3);
-            token.y = tileY + this.tileSize / 4 * (nTokensInTile < 2 ? 1 : 3);
+            token.x = tileX + this.tileSize / 4 * (tileTokenIndex % 2 === 0 ? 1 : 3);
+            token.y = tileY + this.tileSize / 4 * (tileTokenIndex < 2 ? 1 : 3);
         }
     }
 
