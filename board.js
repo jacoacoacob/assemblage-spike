@@ -1,6 +1,6 @@
 import { Canvas } from "./canvas.js";
 import { drawArc, drawText } from "./draw.js";
-import { randFromRange, randId } from "./utils.js";
+import { randFromRange, randId, sum } from "./utils.js";
 
 class Tile {
     /**
@@ -38,43 +38,48 @@ class Token {
 }
 
 
-const TOKEN_COLORS = {
-    p1: "#fad",
-    p2: "#adf",
-};
+
 
 /**
  * 
- * @param {Canvas} canvas 
- * @param {Token} token 
+ * @param {Board} board
+ * @param {number} tileIndex 
+ * @param {string} tokenId 
  */
-function paintToken(canvas, token) {
-    drawArc(canvas, {
-        x: token.x,
-        y: token.y,
-        r: token.r,
-        fill: true,
-        fillStyle: TOKEN_COLORS[token.player],
-        stroke: true,
-        strokeStyle: "#555"
-    });
-    drawText(canvas, {
-        x: token.x - 3,
-        y: token.y + 4,
-        font: "12px sans-serif",
-        fillStyle: "black",
-        text: token.value
-    });
+function validateMove(board, tileIndex, tokenId) {
+    const tileTokenIds = board.graph[tileIndex].filter(
+        tokenId_ => tokenId_ !== tokenId
+    );
+    if (tileTokenIds.length > 3) {
+        return {
+            isValid: false,
+            message: "Each tile can contain a maximum of 4 tokens.",
+        };
+    }
+    const tile = board.tiles[tileIndex];
+    const token = board.tokens[tokenId];
+    const tileTokenValueSum = sum(
+        tileTokenIds.map(tokenId => board.tokens[tokenId].value)
+    );
+    if (tileTokenValueSum + token.value > tile.threshold) {
+        return {
+            isValid: false,
+            message: "The sum of all token values in a tile must be less than or equal to the tile's threshold."
+        }
+    }
+    return { isValid: true };
 }
 
 class Board {
     /**
      * 
+     * @param {string} gameId
      * @param {number} rows 
      * @param {number} cols 
      * @param {number} tileSize 
      */
-    constructor(rows, cols, tileSize) {
+    constructor(gameId, rows, cols, tileSize) {
+        this.gameId = gameId;
         this.rows = rows;
         this.cols = cols;
         this.tileSize = tileSize;
@@ -177,4 +182,4 @@ class Board {
     }
 }
 
-export { Board, paintToken };
+export { Board, Token, validateMove };

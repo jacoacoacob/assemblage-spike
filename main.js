@@ -1,23 +1,12 @@
-
-
 import { createGame } from "./game.js";
-import { NASError } from "./error.js";
-import { randFromRange } from "./utils.js";
 
-const game = window.game = createGame({
-    name: "my-game",
-});
-
-game.setup();
-
+const game = window.game = createGame("game-1");
 
 function main() {
-    // game.update();
+    game.setup();
     game.paint();
     // requestAnimationFrame(main);
 }
-
-// // console.log(randFromRange(1, 6));
 
 main();
 

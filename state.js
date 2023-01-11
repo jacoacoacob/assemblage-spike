@@ -10,19 +10,19 @@ class FSM {
         state,
         {
             setup = () => void 0,
-            render = () => void 0,
+            tick = (...args) => void 0,
             cleanup = () => void 0
         } = {}
     ) {
         this.states[state] = {
             setup: setup.bind(this),
-            render: render.bind(this),
+            tick: tick.bind(this),
             cleanup: cleanup.bind(this),
         };
     }
 
-    render() {
-        this.states[this.state].render();
+    tick(...args) {
+        this.states[this.state].tick(...args);
     }
 
     setState(state, data) {
