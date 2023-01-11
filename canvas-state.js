@@ -4,8 +4,6 @@ import { FSM } from "./state.js";
 import { isCircleCollision } from "./utils.js";
 import { saveBoard } from "./storage.js";
 
-
-
 /**
  * 
  * @param {Board} board 
@@ -13,7 +11,6 @@ import { saveBoard } from "./storage.js";
  * @param {() => void} paint
  */
 function createCanvasState(board, canvas, paint) {
-
     const canvasState = new FSM({ selectedTokenId: null });
     const moveValidityState = new FSM({
         selector: "#messages",
@@ -38,6 +35,7 @@ function createCanvasState(board, canvas, paint) {
             }
         }
     });
+
     moveValidityState.addState("invalid", {
         setup() {
             this.data.isValid = false;

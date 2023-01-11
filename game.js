@@ -1,6 +1,7 @@
 import { Canvas } from "./canvas.js";
 // import { Board, ADD, SUBTRACT } from "./sandbox.js";
 import { createCanvasState } from "./canvas-state.js";
+import { createSidePanelState } from "./side-panel-state.js";
 import { saveBoard, loadBoard } from "./storage.js";
 import { paintBoard } from "./paint.js";
 
@@ -17,6 +18,7 @@ function createGame(name) {
     });
 
     const { canvasState, moveValidityState } = createCanvasState(board, canvas, paint);
+    const { sidePanelState } = createSidePanelState(board, canvas, paint);
 
     function setup() {
         canvas.width = board.cols * board.tileSize;
@@ -24,6 +26,7 @@ function createGame(name) {
 
         canvasState.setState("idle");
         moveValidityState.setState("valid");
+        sidePanelState.setState("initial");
 
         saveBoard(board)
     }

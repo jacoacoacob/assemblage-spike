@@ -5,10 +5,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assemblage</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        a,
+        button,
+        input {
+            font: inherit;
+        }
+        button {
+            background-color: whitesmoke;
+            border: 1px solid black;
+            border-radius: 4px;
+            box-shadow: 3px 3px black;
+            cursor: pointer;
+            padding: 2px 8px;
+        }
+        button:active {
+            box-shadow: 2px 2px black;
+        }
+        .flex {
+            display: flex;
+        }
+        .space-x-1 > *:not(:last-child) {
+            margin-right: 4px;
+        }
+        .space-x-2 > *:not(:last-child) {
+            margin-right: 8px;
+        }
+        .space-x-3 > *:not(:last-child) {
+            margin-right: 16px;
+        }
+        .space-x-4 > *:not(:last-child) {
+            margin-right: 32px;
+        }
+    </style>
 </head>
 <body>
-    <div id="canvas"></div>
-    <div id="messages"></div>
+    <div class="flex space-x-3">
+        <div>
+            <div id="canvas"></div>
+            <div id="messages"></div>
+        </div>
+        <div>
+            <button id="btn-score">Score</button>
+        </div>
+    </div>
     <script src="main.js" type="module"></script>
 </body>
 </html>

@@ -17,8 +17,8 @@ function paintBoard(canvas, board) {
             w: board.tileSize,
             h: board.tileSize,
             fill: true,
-            // fillStyle: tile.color,
-            fillStyle: "whitesmoke",
+            fillStyle: tile.color,
+            // fillStyle: "whitesmoke",
             stroke: true,
         });
         drawText(canvas, {
