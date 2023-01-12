@@ -4,12 +4,10 @@ class Tile {
     /**
      * 
      * @param {number} threshold 
-     * @param {"add" | "subtract"} operator 
      * @param {[number, number, number] | [number, number, number, number]} color 
      */
-    constructor(threshold, operator, [r, g, b, a]) {
+    constructor(threshold, [r, g, b, a]) {
         this.threshold = threshold;
-        this.operator = operator;
         this.color = typeof a === "number"
             ? `rgba(${r}, ${g}, ${b}, ${a})`
             : `rgb(${r}, ${g}, ${b})`;
@@ -55,7 +53,6 @@ class Board {
         this.tiles = Array.from(Array(rows * cols)).map(
             () => new Tile(
                 randFromRange(5, 15),
-                Math.random() < 0.5 ? "add" : "subtract",
                 [
                     randFromRange(0, 255),
                     randFromRange(0, 255),
@@ -145,16 +142,6 @@ class Board {
             token.y = tileY + this.tileSize / 4 * (tileTokenIndex < 2 ? 1 : 3);
         }
     }
-
-    // /**
-    //  * 
-    //  * @param {string} tokenId 
-    //  * @param {number} tileIndex 
-    //  */
-    // placeToken(tokenId, tileIndex) {
-    //     this.moveToken(tokenId, tileIndex);
-    //     this.positionTokenInTile()
-    // }
 
     /**
      * 

@@ -1,6 +1,9 @@
 import { Board } from "./board.js";
 import { sum } from "./utils.js";
 
+const PENALTY_LONE_TOKEN = -1;
+
+
 /**
  * 
  * @param {Board} board 
@@ -27,6 +30,12 @@ function scoreTile(board, tileIndex) {
 
     const playerNames = Object.keys(tileContents.players);
 
+    if (playerNames.length === 1) {
+        return {
+            [playerNames[0]]: PENALTY_LONE_TOKEN,
+        }
+    }
+
     if (playerNames.length > 1) {
         const playerTotals = playerNames.reduce((accum, player) => {
             accum[player] = sum(tileContents.players[player].map(token => token.value))
@@ -41,11 +50,7 @@ function scoreTile(board, tileIndex) {
                 .filter(player_ => player_ !== player)
                 .forEach(otherPlayer => {
                     const diff = playerTotals[player] - playerTotals[otherPlayer];
-                    // if (tile.operator === "add") {
-                        accum[player] += diff + remainingTileThreshold;
-                    // } else {
-                        // accum[player] += diff  remainingTileThreshold;
-                    // }
+                    accum[player] += diff + remainingTileThreshold;
                 });
             return accum;
         }, {});
@@ -56,4 +61,24 @@ function scoreTile(board, tileIndex) {
     return null;
 }
 
-export { scoreTile };
+/**
+ * 
+ * @param {Board} board 
+ */
+function scoreBoard(board) {
+    return board.tiles.reduce((accum, _, tileIndex) => {
+        const tileScores = scoreTile(board, tileIndex);
+        if (tileScores) {
+            Object.entries(tileScores).forEach(([playerName, playerScore]) => {
+                if (!accum.totals[playerName]) {
+                    accum.totals[playerName] = 0;
+                }
+                accum.totals[playerName] += playerScore;
+            });
+        }
+        accum.tileScores.push(tileScores);
+        return accum;
+    }, { tileScores: [], totals: {} });
+}
+
+export { scoreBoard };

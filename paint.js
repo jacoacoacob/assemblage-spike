@@ -68,7 +68,7 @@ function paintToken(canvas, token) {
         strokeStyle: "#555"
     });
     drawText(canvas, {
-        x: token.x - 7,
+        x: token.x - 4,
         y: token.y + 4,
         font: "12px sans-serif",
         fillStyle: "black",

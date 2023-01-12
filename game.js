@@ -13,13 +13,8 @@ import { paintBoard } from "./paint.js";
  * @param {string} player
  */
 function generatePlayerTokens(board, player) {
-    const values = Array.from(Array(12)).map((_, i, arr) => {
-        if (i >= arr.length / 2) {
-            return i - 5;
-        }
-        return i - 6;
-    });
-    for (let i = 0; i < 2; i++) {
+    const values = Array.from(Array(4)).map((_, i) => i + 1);
+    for (let i = 0; i < 6; i++) {
         values.forEach(value => {
             board.addToken(player, value);
         });
@@ -41,11 +36,11 @@ function createGame(name) {
             return accum;
         }, {});
         b.moveToken(playerTokenIds.p1[0], 8);
-        b.moveToken(playerTokenIds.p1[1], 12);
-        b.moveToken(playerTokenIds.p1[2], 12);
+        b.moveToken(playerTokenIds.p1[10], 12);
+        b.moveToken(playerTokenIds.p1[20], 12);
         b.moveToken(playerTokenIds.p2[0], 8);
-        b.moveToken(playerTokenIds.p2[1], 12);
-        b.moveToken(playerTokenIds.p2[2], 12);
+        b.moveToken(playerTokenIds.p2[10], 12);
+        b.moveToken(playerTokenIds.p2[20], 12);
         // b.positionTokenInTile(playerTokenIds.p1[0]);
     });
 

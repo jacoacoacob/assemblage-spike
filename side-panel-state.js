@@ -1,7 +1,7 @@
 import { Board } from "./board.js";
 import { Canvas } from "./canvas.js";
 import { FSM } from "./state.js";
-import { scoreTile } from "./score.js";
+import { scoreBoard } from "./score.js";
 
 /**
  * 
@@ -17,16 +17,12 @@ function createSidePanelState(board, canvas, paint) {
             const btnScore = document.querySelector("#btn-score");
 
             btnScore.addEventListener("click", (e) => {
-                board.tiles.forEach((_, tileIndex) => {
-                    const score = scoreTile(board, tileIndex);
-                    if (score) {
-                        console.log(score);
-                    }
-                })
+                const scores = scoreBoard(board);
+                console.log(scores);
             });
         },
         cleanup() {
-
+            
         },
     });
 
