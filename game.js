@@ -40,7 +40,10 @@ function createGame(name) {
         b.moveToken(playerTokenIds.p1[20], 12);
         b.moveToken(playerTokenIds.p2[0], 8);
         b.moveToken(playerTokenIds.p2[10], 12);
-        b.moveToken(playerTokenIds.p2[20], 12);
+        b.moveToken(playerTokenIds.p2[20], 11);
+        b.moveToken(playerTokenIds.p3[0], 5);
+        b.moveToken(playerTokenIds.p3[10], 11);
+        b.moveToken(playerTokenIds.p3[20], 12);
         // b.positionTokenInTile(playerTokenIds.p1[0]);
     });
 

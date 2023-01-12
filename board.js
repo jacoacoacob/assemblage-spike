@@ -51,15 +51,16 @@ class Board {
         this.tileSize = tileSize;
         /** @type {Tile[]} */
         this.tiles = Array.from(Array(rows * cols)).map(
-            () => new Tile(
-                randFromRange(5, 15),
-                [
-                    randFromRange(0, 255),
-                    randFromRange(0, 255),
-                    randFromRange(0, 255),
-                    0.8
-                ]
-            )
+            () => {
+                return new Tile(
+                    randFromRange(5, 15),
+                    [
+                        randFromRange(220, 255),
+                        randFromRange(220, 255),
+                        randFromRange(220, 255),
+                    ]
+                );
+            }
         );
         /** @type {Record<Token["id"], Token>} */
         this.tokens = {};

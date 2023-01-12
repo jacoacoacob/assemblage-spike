@@ -17,8 +17,8 @@ function paintBoard(canvas, board) {
             w: board.tileSize,
             h: board.tileSize,
             fill: true,
-            // fillStyle: tile.color,
             fillStyle: "whitesmoke",
+            fillStyle: tile.color,
             stroke: true,
         });
         drawText(canvas, {
@@ -46,10 +46,19 @@ function paintBoard(canvas, board) {
     });
 }
 
+const RED = "#935";
+const GREEN = "#385";
+const BLUE = "#359";
+const ORANGE = "#b73";
+
 const TOKEN_COLORS = {
-    p1: "#adf",
-    p2: "#fad",
-    p3: "#dfa"
+    // p1: "#adf",
+    p1: BLUE,
+    // p2: "#fad",
+    p2: RED,
+    // p3: "#dfa"
+    p3: GREEN,
+    p4: ORANGE
 };
 
 /**
@@ -65,14 +74,13 @@ function paintToken(canvas, token) {
         fill: true,
         fillStyle: TOKEN_COLORS[token.player],
         stroke: true,
-        strokeStyle: "#555"
+        strokeStyle: "black"
     });
     drawText(canvas, {
         x: token.x - 4,
         y: token.y + 4,
         font: "12px sans-serif",
-        fillStyle: "black",
-        // text: `${token.polarity === "positive" ? "+" : "-"}${token.value}`
+        fillStyle: "white",
         text: token.value
     });
 }
