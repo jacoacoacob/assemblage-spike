@@ -28,6 +28,7 @@ function createGame(name) {
         generatePlayerTokens(b, "p1");
         generatePlayerTokens(b, "p2");
         generatePlayerTokens(b, "p3");
+        generatePlayerTokens(b, "p4");
         const playerTokenIds = Object.values(b.tokens).reduce((accum, token) => {
             if (!accum[token.player]) {
                 accum[token.player] = [];
@@ -44,6 +45,9 @@ function createGame(name) {
         b.moveToken(playerTokenIds.p3[0], 5);
         b.moveToken(playerTokenIds.p3[10], 11);
         b.moveToken(playerTokenIds.p3[20], 12);
+        b.moveToken(playerTokenIds.p4[0], 5);
+        b.moveToken(playerTokenIds.p4[10], 11);
+        b.moveToken(playerTokenIds.p4[20], 12);
         // b.positionTokenInTile(playerTokenIds.p1[0]);
     });
 

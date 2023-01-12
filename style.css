@@ -1,0 +1,121 @@
+/* PREFLIGHT */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+    margin: 4px;
+}
+a, button, input {
+    font: inherit;
+}
+button {
+    background-color: whitesmoke;
+    border: 1px solid black;
+    border-radius: 4px;
+    box-shadow: 3px 3px black;
+    cursor: pointer;
+    padding: 2px 8px;
+}
+button:active {
+    box-shadow: 2px 2px black;
+}
+
+/* UTILS */
+.flex {
+    display: flex;
+}
+.items-center {
+    align-items: center;
+}
+.content-center {
+    justify-content: center;
+}
+.min-h-full {
+    height: 100%;
+}
+.min-h-screen {
+    min-height: 100vh;
+}
+.space-x-1 > *:not(:last-child) {
+    margin-right: 4px;
+}
+.space-x-2 > *:not(:last-child) {
+    margin-right: 8px;
+}
+.space-x-3 > *:not(:last-child) {
+    margin-right: 16px;
+}
+.space-x-4 > *:not(:last-child) {
+    margin-right: 32px;
+}
+.space-y-1 > *:not(:last-child) {
+    margin-bottom: 4px;
+}
+.space-y-2 > *:not(:last-child) {
+    margin-bottom: 8px;
+}
+.space-y-3 > *:not(:last-child) {
+    margin-bottom: 16px;
+}
+.space-y-4 > *:not(:last-child) {
+    margin-bottom: 32px;
+}
+
+/* COMPONENTS */
+.container {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+}
+.content {
+    justify-content: center;
+    display: flex;
+    padding: 16px;
+    width: 100%;
+}
+.content > div:not(:last-child) {
+    margin-right: 16px;
+}
+.left-panel {
+    flex: 1;
+    border: 1px solid #888;
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 100%;
+    max-width: 300px;
+}
+.left-panel__history {
+    padding: 8px;
+}
+.left-panel__chat {
+    padding: 8px;
+}
+.right-panel {
+    flex: 1;
+    border: 1px solid #888;
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 100%;
+    max-width: 300px;
+
+}
+.right-panel__controls {
+    padding: 8px;
+}
+.right-panel__info {
+    padding: 8px;
+}
+
+.game {
+    position: relative
+}
+.game__messages {
+    position: absolute;
+}
